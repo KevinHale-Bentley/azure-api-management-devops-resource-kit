@@ -46,6 +46,8 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
         public string paramLogResourceId { get; set; }
         [Description("Specify the the base url for calling api management")]
         public string serviceBaseUrl { get; set; }
+        [Description("Exclude NamedValues from extraction.")]
+        public string excludeNamedValues { get; set; }
         public void Validate()
         {
             if (string.IsNullOrEmpty(sourceApimName)) throw new ArgumentException("Missing parameter <sourceApimName>.");
@@ -104,6 +106,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
         public bool paramNamedValue { get; private set; }
         public bool paramApiLoggerId { get; private set; }
         public bool paramLogResourceId { get; private set; }
+        public bool excludeNamedValues { get; private set; }
 
         public Extractor(ExtractorConfig exc, string dirName)
         {
@@ -123,6 +126,7 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             this.paramNamedValue = exc.paramNamedValue != null && exc.paramNamedValue.Equals("true");
             this.paramApiLoggerId = exc.paramApiLoggerId != null && exc.paramApiLoggerId.Equals("true");
             this.paramLogResourceId = exc.paramLogResourceId != null && exc.paramLogResourceId.Equals("true");
+            this.excludeNamedValues = exc.excludeNamedValues != null && exc.excludeNamedValues.Equals("true");
         }
 
         public Extractor(ExtractorConfig exc) : this(exc, exc.fileFolder)

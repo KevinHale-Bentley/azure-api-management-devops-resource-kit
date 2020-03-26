@@ -98,9 +98,13 @@ namespace Microsoft.Azure.Management.ApiManagement.ArmTemplates.Extract
             Template loggerTemplate = await loggerExtractor.GenerateLoggerTemplateAsync(exc, singleApiName, apiTemplateResources, apiLoggerId);
             Template productTemplate = await productExtractor.GenerateProductsARMTemplateAsync(sourceApim, resourceGroup, singleApiName, apiTemplateResources, policyXMLBaseUrl, policyXMLSasToken, dirName);
             List<TemplateResource> productTemplateResources = productTemplate.resources.ToList();
-            Template namedValueTemplate = await propertyExtractor.GenerateNamedValuesTemplateAsync(singleApiName, apiTemplateResources, exc);
+            List<TemplateResource> namedValueResources = null;
+            if ( ! exc.excludeNamedValues )
+                {
+                Template namedValueTemplate = await propertyExtractor.GenerateNamedValuesTemplateAsync(singleApiName, apiTemplateResources, exc);
+                namedValueResources = namedValueTemplate.resources.ToList();
+                }
             Template tagTemplate = await tagExtractor.GenerateTagsTemplateAsync(sourceApim, resourceGroup, singleApiName, apiTemplateResources, productTemplateResources, policyXMLBaseUrl, policyXMLSasToken);
-            List<TemplateResource> namedValueResources = namedValueTemplate.resources.ToList();
             Template backendTemplate = await backendExtractor.GenerateBackendsARMTemplateAsync(sourceApim, resourceGroup, singleApiName, apiTemplateResources, namedValueResources, policyXMLBaseUrl, policyXMLSasToken);
 
             Dictionary<string, string> loggerResourceIds = null;
